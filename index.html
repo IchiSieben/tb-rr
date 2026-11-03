@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TB-RR · Benchmark peruano</title>
+<meta name="description" content="Primera evaluación de las herramientas genómicas de predicción de resistencia a tuberculosis sobre aislados peruanos.">
+<style>
+:root{--bg:#fff;--fg:#1d1d1f;--mute:#6e6e73;--soft:#f5f5f7;--line:#d2d2d7;--accent:#0071e3;--r:#bf2a2a;--s:#1d7f45;--warn:#a05a00}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--fg:#f5f5f7;--mute:#a1a1a6;--soft:#161617;--line:#3a3a3c;--accent:#2997ff;--r:#ff6961;--s:#30d158;--warn:#ffb340}}
+:root[data-theme="dark"]{--bg:#000;--fg:#f5f5f7;--mute:#a1a1a6;--soft:#161617;--line:#3a3a3c;--accent:#2997ff;--r:#ff6961;--s:#30d158;--warn:#ffb340}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+main{max-width:860px;margin:0 auto;padding:0 16px}
+section{padding:112px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+.eyebrow{color:var(--accent);font-weight:600;font-size:17px;margin:0 0 12px}
+h1{font-size:clamp(56px,12vw,112px);line-height:1;letter-spacing:-.03em;margin:0 0 24px;font-weight:700}
+h2{font-size:clamp(34px,6vw,56px);line-height:1.07;letter-spacing:-.02em;margin:0 0 24px;font-weight:700}
+.lead{font-size:clamp(21px,3vw,28px);line-height:1.3;color:var(--mute);margin:0 0 56px;font-weight:500}
+.lead b{color:var(--fg);font-weight:600}
+.stats{display:flex;gap:48px;flex-wrap:wrap}
+.stat .n{font-size:clamp(48px,9vw,80px);font-weight:700;letter-spacing:-.03em;line-height:1}
+.stat .l{color:var(--mute);font-size:17px;margin-top:8px;max-width:22ch}
+.note{font-size:13px;color:var(--mute);margin-top:32px}
+p.big{font-size:clamp(21px,3vw,28px);line-height:1.35;margin:0 0 20px;font-weight:500}
+p.big span{color:var(--mute)}
+svg{width:100%;height:auto;display:block;margin-top:24px}
+svg text{fill:var(--fg);font-family:inherit}
+svg .box{fill:var(--soft)}
+svg .key{fill:var(--accent)}
+svg .keyt{fill:#fff;font-weight:600}
+svg .arr{stroke:var(--mute);stroke-width:1.5;fill:none}
+svg .sub{fill:var(--mute)}
+.badge{display:inline-block;background:var(--warn);color:var(--bg);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:16px}
+.tbl{overflow-x:auto;margin-top:24px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;color:var(--mute);font-weight:500;padding:10px 12px 10px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:12px 12px 12px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td.c{font-weight:700;text-align:center;width:48px}
+.R{color:var(--r)}.S{color:var(--s)}.U{color:var(--warn)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+ul.clean{list-style:none;padding:0;margin:0}
+ul.clean li{padding:18px 0;border-bottom:1px solid var(--line);font-size:19px;display:flex;gap:16px;align-items:baseline}
+ul.clean li:last-child{border-bottom:0}
+.tag{flex:0 0 auto;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.ok{background:var(--s);color:var(--bg)}.pend{background:var(--soft);color:var(--mute)}
+.mini{font-size:15px;color:var(--mute);margin-top:4px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+footer{max-width:860px;margin:0 auto;padding:48px 16px 80px;color:var(--mute);font-size:13px}
+@media (max-width:600px){section{padding:72px 0}.stats{gap:32px}ul.clean li{font-size:17px;flex-direction:column;gap:8px}}
+</style>
+</head>
+<body>
+<main>
+
+<section>
+  <p class="eyebrow">Hackathon FACI 2026 · UPCH · Reto 1</p>
+  <h1>TB-RR</h1>
+  <p class="lead">Cuánto se puede confiar, <b>en el Perú</b>, en la secuenciación para predecir la resistencia de la tuberculosis. Fármaco por fármaco.</p>
+  <div class="stats">
+    <div class="stat"><div class="n">29 292</div><div class="l">casos de tuberculosis en el Perú en 2022</div></div>
+    <div class="stat"><div class="n">56 %</div><div class="l">en Lima y Callao</div></div>
+    <div class="stat"><div class="n">2 638</div><div class="l">aislados peruanos con genoma y fenotipo en CRyPTIC</div></div>
+  </div>
+  <p class="note">29 292 y 56 %: dato proporcionado por el equipo, fuente MINSA por citar. 2 638: contado hoy sobre los datos abiertos de CRyPTIC (<code>src/01_count_peru.py</code>).</p>
+</section>
+
+<section>
+  <p class="eyebrow">El problema</p>
+  <h2>Semanas a ciegas.</h2>
+  <p class="big">El cultivo y la prueba de sensibilidad tardan semanas.</p>
+  <p class="big"><span>Mientras tanto, el paciente recibe un esquema empírico.</span></p>
+  <p class="big">La secuenciación responde en días. Pero nadie ha medido qué tan bien acierta con cepas peruanas.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Cómo funciona</p>
+  <h2>Del genoma a una tabla que el INS pueda usar.</h2>
+  <svg viewBox="0 0 400 620" role="img" aria-label="Flujo: CRyPTIC, tabla aislado por variante, partición por linaje, modelos por fármaco, comparación contra catálogo OMS, tabla de discrepancias. Uso: el usuario sube variantes y obtiene resultado por fármaco.">
+    <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor" style="color:var(--mute)"/></marker></defs>
+    <g font-size="15" text-anchor="middle">
+      <rect class="box" x="40" y="0" width="320" height="56" rx="14"/><text x="200" y="25" font-weight="600">CRyPTIC</text><text class="sub" x="200" y="44" font-size="12">12 287 aislados · 2 638 peruanos</text>
+      <path class="arr" d="M200 56v20" marker-end="url(#a)"/>
+      <rect class="box" x="40" y="80" width="320" height="56" rx="14"/><text x="200" y="113" font-weight="600">Tabla aislado × variante × fenotipo</text>
+      <path class="arr" d="M200 136v20" marker-end="url(#a)"/>
+      <rect class="key" x="40" y="160" width="320" height="56" rx="14"/><text class="keyt" x="200" y="185">Partición POR LINAJE</text><text class="keyt" x="200" y="204" font-size="12" font-weight="400">nunca al azar · Billows et al. 2023</text>
+      <path class="arr" d="M200 216v20" marker-end="url(#a)"/>
+      <rect class="box" x="40" y="240" width="320" height="56" rx="14"/><text x="200" y="265" font-weight="600">Modelos por fármaco</text><text class="sub" x="200" y="284" font-size="12">TB-Profiler · OMS · modelo propio</text>
+      <path class="arr" d="M200 296v20" marker-end="url(#a)"/>
+      <rect class="box" x="40" y="320" width="320" height="56" rx="14"/><text x="200" y="345" font-weight="600">Comparación contra catálogo OMS</text><text class="sub" x="200" y="364" font-size="12">sensibilidad y especificidad · IC 95 %</text>
+      <path class="arr" d="M200 376v20" marker-end="url(#a)"/>
+      <rect class="box" x="40" y="400" width="320" height="56" rx="14"/><text x="200" y="433" font-weight="600">Tabla de discrepancias</text>
+      <line x1="40" y1="500" x2="360" y2="500" stroke="var(--line)" stroke-dasharray="4 4"/>
+      <text class="sub" x="200" y="530" font-size="12">EN USO</text>
+      <rect class="box" x="10" y="548" width="160" height="56" rx="14"/><text x="90" y="573" font-weight="600">Usuario sube</text><text x="90" y="592" font-weight="600">variantes</text>
+      <path class="arr" d="M172 576h52" marker-end="url(#a)"/>
+      <rect class="key" x="230" y="548" width="160" height="56" rx="14"/><text class="keyt" x="310" y="573">Resultado</text><text class="keyt" x="310" y="592">por fármaco</text>
+    </g>
+  </svg>
+</section>
+
+<section>
+  <p class="eyebrow">La pantalla de resultado</p>
+  <span class="badge">Ejemplo ilustrativo · no es un paciente real</span>
+  <h2>Trece fármacos. Una mutación responsable. Su clase OMS.</h2>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Fármaco</th><th>R/S</th><th>Mutación responsable</th><th>Clase OMS (2.ª ed.)</th></tr></thead>
+    <tbody>
+      <tr><td>Rifampicina</td><td class="c R">R</td><td><code>rpoB S450L</code></td><td>1 · Asociada con resistencia</td></tr>
+      <tr><td>Rifabutina</td><td class="c R">R</td><td><code>rpoB S450L</code></td><td>1 · Asociada con resistencia</td></tr>
+      <tr><td>Isoniazida</td><td class="c R">R</td><td><code>katG S315T</code></td><td>1 · Asociada con resistencia</td></tr>
+      <tr><td>Etambutol</td><td class="c R">R</td><td><code>embB M306V</code></td><td>1 · Asociada con resistencia</td></tr>
+      <tr><td>Etionamida</td><td class="c S">S</td><td>—</td><td>Sin mutación catalogada</td></tr>
+      <tr><td>Levofloxacino</td><td class="c S">S</td><td>—</td><td>Sin mutación catalogada</td></tr>
+      <tr><td>Moxifloxacino</td><td class="c S">S</td><td>—</td><td>Sin mutación catalogada</td></tr>
+      <tr><td>Amikacina</td><td class="c S">S</td><td>—</td><td>Sin mutación catalogada</td></tr>
+      <tr><td>Kanamicina</td><td class="c S">S</td><td>—</td><td>Sin mutación catalogada</td></tr>
+      <tr><td>Bedaquilina</td><td class="c U">?</td><td>—</td><td>Evidencia peruana insuficiente</td></tr>
+      <tr><td>Delamanid</td><td class="c U">?</td><td>—</td><td>Evidencia peruana insuficiente</td></tr>
+      <tr><td>Linezolid</td><td class="c U">?</td><td>—</td><td>Evidencia peruana insuficiente</td></tr>
+      <tr><td>Clofazimina</td><td class="c U">?</td><td>—</td><td>Evidencia peruana insuficiente</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">Por qué "?" en los cuatro nuevos: entre los 2 638 aislados peruanos hay solo 3 resistentes a bedaquilina, 9 a delamanid, 1 a linezolid y 10 a clofazimina. Con eso no se puede estimar la sensibilidad con precisión útil.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Qué nos diferencia</p>
+  <h2>No competimos con TB-Profiler ni con GenTB. Los evaluamos.</h2>
+  <p class="big">Las métricas publicadas de estas herramientas son promedios mundiales.</p>
+  <p class="big"><span>No encontramos una evaluación publicada sobre aislados peruanos. Eso es lo que hacemos.</span></p>
+  <p class="big">La respuesta para el INS: <b>qué esperar de la secuenciación en el Perú, fármaco por fármaco, y en cuáles no confiar todavía.</b></p>
+</section>
+
+<section>
+  <p class="eyebrow">Estado honesto · 2 nov 2026</p>
+  <h2>Lo que funciona hoy, y lo que está programado.</h2>
+  <ul class="clean">
+    <li><span class="tag ok">Logrado</span><div>Conteo reproducible de aislados peruanos, linajes y fenotipos<div class="mini">2 638 aislados · linaje 4: 2 259 · linaje 2: 340</div></div></li>
+    <li><span class="tag ok">Logrado</span><div>README, ficha técnica y esta página</div></li>
+    <li><span class="tag pend">Programado</span><div>TB-Profiler y catálogo OMS sobre los aislados peruanos<div class="mini">Sensibilidad y especificidad: [PENDIENTE]</div></div></li>
+    <li><span class="tag pend">Programado</span><div>Modelo propio con partición por linaje<div class="mini">Métricas: [PENDIENTE]</div></div></li>
+    <li><span class="tag pend">Programado</span><div>Tabla de discrepancias (foco: bedaquilina, delamanid, linezolid, clofazimina)</div></li>
+    <li><span class="tag pend">Programado</span><div>App Streamlit pública</div></li>
+  </ul>
+  <p class="note">TB-RR es una herramienta de apoyo a investigación y vigilancia. No diagnostica. No sustituye el cultivo, la prueba de sensibilidad fenotípica ni el criterio clínico.</p>
+</section>
+
+</main>
+<footer>
+  Datos: The CRyPTIC Consortium, <i>PLoS Biol</i> 2022, doi:10.1371/journal.pbio.3001721 · Catálogo OMS de mutaciones, 2.ª ed., 2023 · Código: <a href="https://github.com/IchiSieben/tb-rr">github.com/IchiSieben/tb-rr</a> · Redactado con apoyo de IA (Claude), revisado por el equipo.
+</footer>
+</body>
+</html>
