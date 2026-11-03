@@ -59,7 +59,12 @@ Fenotipo binario en los 2 638 aislados peruanos:
 **Primer hallazgo, honesto:** con 1 a 10 aislados resistentes, la sensibilidad para
 bedaquilina, delamanid, linezolid y clofazimina **no puede estimarse con precisión útil** en
 el Perú con estos datos. Es justo el grupo que GenTB no cubre y el que más importa para los
-esquemas nuevos. Para esos fármacos, la prueba fenotípica sigue siendo imprescindible.
+esquemas nuevos. Aun con acierto perfecto, la cota inferior del IC 95 % (Wilson) de la
+sensibilidad sería 43,8 % en BDQ, 70,1 % en DLM, 20,7 % en LZD y 72,2 % en CFZ (aritmética
+sobre los conteos, no un resultado de desempeño). Conclusión: **el benchmark peruano es
+posible en primera línea e inviable hoy en fármacos nuevos por escasez de fenotipos
+resistentes en la cohorte peruana.** Para esos fármacos solo se estimará especificidad y se
+describirán caso a caso los 23 resistentes; la prueba fenotípica sigue siendo imprescindible.
 
 Matiz: el Perú también es mayoritariamente linaje 4, así que el contraste relevante no es
 "Perú vs. mundo L4" sino **L2 (Beijing, 340 aislados) frente a L4 dentro del Perú**.

@@ -37,14 +37,32 @@ Herramienta de apoyo a investigación y vigilancia. No diagnostica y no sustituy
 
 **Objetivo general.** Evaluar el desempeño de herramientas genómicas de predicción de resistencia a TB sobre aislados peruanos y traducirlo en una guía fármaco por fármaco sobre qué se puede y qué no se puede esperar de la secuenciación en el Perú.
 
+**Hallazgo que reordena los objetivos.** El benchmark peruano es **posible en primera línea y
+fluoroquinolonas/aminoglucósidos, e inviable hoy en los fármacos nuevos** (bedaquilina,
+delamanid, linezolid, clofazimina) por escasez de fenotipos resistentes en la cohorte peruana
+(3, 9, 1 y 10 aislados). No es un defecto del proyecto que se esconda: es una conclusión en sí
+misma, verificable y citable. Los objetivos se separan en consecuencia.
+
 **Objetivos específicos.**
 
 1. Caracterizar la base de aislados peruanos disponible en datos abiertos: tamaño, linajes y número de resistentes por fármaco. *(Logrado.)*
-2. Ejecutar TB-Profiler y aplicar el catálogo OMS 2023 sobre los genomas peruanos y comparar sus predicciones con el fenotipo. *(Programado.)*
-3. Entrenar un modelo propio con partición por linaje, no aleatoria, y compararlo con los dos anteriores. *(Programado.)*
-4. Calcular sensibilidad y especificidad por fármaco con intervalos de confianza de 95 % (Wilson), incluido el contraste L2 frente a L4. *(Programado.)*
-5. Identificar fármacos donde la evidencia local es insuficiente para estimar el desempeño y analizar las discrepancias en bedaquilina, delamanid, linezolid y clofazimina. *(Programado.)*
-6. Publicar los resultados en una aplicación Streamlit y un repositorio reproducible. *(Programado.)*
+2. Cuantificar, por fármaco, si la cohorte peruana tiene potencia para estimar la sensibilidad, y declarar formalmente inviables los que no la tienen. *(Logrado: ver tabla de potencia en 5.1.)*
+3. **Fármacos con potencia** (RIF, RFB, INH, EMB, ETH, LEV, MXF, AMI, KAN): ejecutar TB-Profiler y el catálogo OMS 2023, entrenar un modelo propio con partición por linaje, y estimar sensibilidad y especificidad con IC 95 % (Wilson), con contraste L2 frente a L4. *(Programado.)*
+4. **Fármacos sin potencia** (BDQ, DLM, LZD, CFZ): no entrenar ni reportar sensibilidad. Solo describir caso a caso los aislados resistentes (qué mutación tienen, qué predice cada herramienta) y estimar especificidad, que sí tiene potencia (más de 2 500 susceptibles por fármaco). *(Programado.)*
+5. Publicar los resultados en una aplicación Streamlit y un repositorio reproducible. *(Programado.)*
+
+**Indicadores.**
+
+| Indicador | Meta | Estado |
+|---|---|---|
+| Aislados peruanos identificados con país verificado | Cifra exacta, reproducible por script | **Logrado: 2 638** |
+| Fármacos clasificados por potencia (estimable / inviable) | 13 de 13 | **Logrado: 9 estimables, 4 inviables** |
+| Fármacos estimables con sensibilidad y especificidad + IC 95 %, por herramienta | 9 × 3 herramientas | [PENDIENTE] |
+| Ancho del IC 95 % de la sensibilidad en fármacos estimables | ≤ 10 puntos porcentuales | [PENDIENTE] |
+| Contraste L2 frente a L4 en RIF e INH | Diferencia con IC 95 % | [PENDIENTE] |
+| Especificidad en BDQ, DLM, LZD, CFZ con IC 95 % | 4 fármacos × 3 herramientas | [PENDIENTE] |
+| Descripción caso a caso de los 23 aislados resistentes a fármacos nuevos | 23 de 23 | [PENDIENTE] |
+| App Streamlit pública | URL activa | [PENDIENTE] |
 
 ## 4. Objetivos de Desarrollo Sostenible
 
@@ -92,7 +110,30 @@ El país no figura en la tabla de reutilización ni en los metadatos de ENA. Se 
 | Linezolid (LZD) | 1 | 0 | 2 617 |
 | Clofazimina (CFZ) | 10 | 0 | 2 578 |
 
-**Lectura.** Con 3, 9, 1 y 10 aislados resistentes, la sensibilidad de BDQ, DLM, LZD y CFZ en el Perú no puede estimarse con precisión útil: el intervalo de 95 % será extremadamente amplio. La conclusión es que, para estos fármacos, la evidencia peruana es insuficiente.
+**Lectura: análisis de potencia.** La tabla siguiente no es un resultado de desempeño: es
+aritmética sobre los conteos. Muestra la cota inferior del IC 95 % (Wilson) de la sensibilidad
+**en el mejor caso posible**, es decir, si una herramienta detectara el 100 % de los
+resistentes.
+
+| Fármaco | Resistentes peruanos | Cota inferior del IC 95 % si sensibilidad observada = 100 % | Veredicto |
+|---|---:|---:|---|
+| RIF | 853 | 99,6 % | Estimable |
+| INH | 1 151 | 99,7 % | Estimable |
+| LEV | 168 | 97,8 % | Estimable |
+| MXF | 143 | 97,4 % | Estimable |
+| AMI | 159 | 97,6 % | Estimable |
+| KAN | 179 | 97,9 % | Estimable |
+| CFZ | 10 | 72,2 % | **Inviable** |
+| DLM | 9 | 70,1 % | **Inviable** |
+| BDQ | 3 | 43,8 % | **Inviable** |
+| LZD | 1 | 20,7 % | **Inviable** |
+
+Aun con un acierto perfecto, en bedaquilina solo se podría afirmar que la sensibilidad está
+por encima del 44 %, y en linezolid por encima del 21 %. Ninguna decisión de salud pública
+puede apoyarse en eso. Conclusión: **el benchmark peruano es posible en primera línea e
+inviable hoy en fármacos nuevos por escasez de fenotipos resistentes en la cohorte peruana.**
+Lo que se necesita para cerrarlo no es un modelo mejor sino más aislados peruanos resistentes
+a fármacos nuevos con fenotipo, que solo puede generar la vigilancia del INS.
 
 **Limitaciones de los datos.** Los aislados provienen de un único sitio (Lima, UPCH). Los datos son de CRyPTIC, no del INS; la coincidencia con la población que atiende el INS no está verificada. No se usan datos de pacientes ni datos no públicos.
 
@@ -122,7 +163,7 @@ Tabla de métricas (a completar tras la ejecución):
 
 ## 6. Resultados esperados
 
-Resultados ya obtenidos (descriptivos, sección 5.1): tamaño de la base peruana, distribución de linajes y número de resistentes por fármaco, incluida la advertencia de evidencia insuficiente para BDQ, DLM, LZD y CFZ.
+Resultados ya obtenidos (sección 5.1): tamaño de la base peruana (2 638 aislados), distribución de linajes, número de resistentes por fármaco y **clasificación de potencia: 9 fármacos estimables y 4 inviables (BDQ, DLM, LZD, CFZ)**. Este último es un resultado citable por sí mismo: el benchmark peruano es posible en primera línea e inviable hoy en fármacos nuevos por escasez de fenotipos resistentes.
 
 Resultados esperados al cierre del proyecto (no obtenidos aún):
 
